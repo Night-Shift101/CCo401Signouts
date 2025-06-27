@@ -1171,3 +1171,9 @@ class HomeWindow:
                         widget.configure(bg=colors['BG_PRIMARY'])
         except Exception as e:
             print(f"Error updating widget colors: {e}")
+
+if __name__ == "__main__":
+
+    window = HomeWindow("Solider Sign-Out System")
+    window.show()
+    window.show()
