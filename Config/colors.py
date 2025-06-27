@@ -55,6 +55,18 @@ BORDER_LIGHT = GRAY_200
 BORDER_MEDIUM = GRAY_300
 BORDER_DARK = GRAY_400
 
+# Dark theme colors
+DARK_BG_PRIMARY = "#1a1a1a"      # Dark primary background
+DARK_BG_SECONDARY = "#2d2d2d"    # Dark secondary background
+DARK_BG_CARD = "#363636"         # Dark card background
+DARK_TEXT_PRIMARY = "#ffffff"    # Dark theme primary text
+DARK_TEXT_SECONDARY = "#d1d5db"  # Dark theme secondary text
+DARK_TEXT_MUTED = "#9ca3af"      # Dark theme muted text
+DARK_GRAY_100 = "#404040"        # Dark gray for inputs
+DARK_GRAY_200 = "#525252"        # Dark gray for borders
+DARK_GRAY_300 = "#666666"        # Dark gray for disabled
+DARK_ONXY = "#e5e5e5"           # Light text for dark backgrounds
+
 COLORS = {
     'primary': PRIMARY_BLUE,
     'primary_dark': PRIMARY_DARK,
@@ -101,6 +113,51 @@ BACKGROUND_COLORS = {
 def get_color(color_name, fallback=WHITE):
     
     return COLORS.get(color_name.lower(), fallback)
+
+def get_theme_colors(theme='light'):
+    """Get colors based on the current theme"""
+    if theme == 'dark':
+        return {
+            'BG_PRIMARY': DARK_BG_PRIMARY,
+            'BG_SECONDARY': DARK_BG_SECONDARY,
+            'BG_CARD': DARK_BG_CARD,
+            'WHITE': DARK_BG_CARD,
+            'GRAY_100': DARK_GRAY_100,
+            'GRAY_200': DARK_GRAY_200,
+            'GRAY_300': DARK_GRAY_300,
+            'GRAY_500': GRAY_500,
+            'GRAY_600': GRAY_600,
+            'GRAY_700': DARK_TEXT_SECONDARY,
+            'ONXY': DARK_ONXY,
+            'TEXT_PRIMARY': DARK_TEXT_PRIMARY,
+            'TEXT_SECONDARY': DARK_TEXT_SECONDARY,
+            'TEXT_MUTED': DARK_TEXT_MUTED,
+            'PRIMARY_BLUE': PRIMARY_BLUE,
+            'SUCCESS': SUCCESS,
+            'ERROR': ERROR,
+            'WARNING': WARNING,
+        }
+    else:  # light theme
+        return {
+            'BG_PRIMARY': BG_PRIMARY,
+            'BG_SECONDARY': BG_SECONDARY,
+            'BG_CARD': BG_CARD,
+            'WHITE': WHITE,
+            'GRAY_100': GRAY_100,
+            'GRAY_200': GRAY_200,
+            'GRAY_300': GRAY_300,
+            'GRAY_500': GRAY_500,
+            'GRAY_600': GRAY_600,
+            'GRAY_700': GRAY_700,
+            'ONXY': ONXY,
+            'TEXT_PRIMARY': TEXT_PRIMARY,
+            'TEXT_SECONDARY': TEXT_SECONDARY,
+            'TEXT_MUTED': TEXT_MUTED,
+            'PRIMARY_BLUE': PRIMARY_BLUE,
+            'SUCCESS': SUCCESS,
+            'ERROR': ERROR,
+            'WARNING': WARNING,
+        }
 
 THEME = {
     'name': 'Professional Military',

@@ -6,14 +6,20 @@ import sys
 import os
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from Config.colors import BG_PRIMARY, WHITE, GRAY_100, GRAY_200, GRAY_500, GRAY_600, GRAY_700, ONXY, SUCCESS, ERROR, PRIMARY_BLUE, PRIMARY_DARK
+from Config.colors import BG_PRIMARY, WHITE, GRAY_100, GRAY_200, GRAY_500, GRAY_600, GRAY_700, ONXY, SUCCESS, ERROR, PRIMARY_BLUE, PRIMARY_DARK, BUTTON_PRIMARY, get_theme_colors
+from Config.theme_manager import theme_manager
 from Functions.pin_manager import PinManager
+
+
+def getDefaultDrill():
+    with open("Security/last_ds.txt", "r") as f:
+        return f.read()
 
 class PinAuthDialog:
     def __init__(self, parent=None, action_name="perform this action", default_ds=None):
         self.parent = parent
         self.action_name = action_name
-        self.default_ds = default_ds
+        self.default_ds = getDefaultDrill()
         self.pin_manager = PinManager()
         self.authenticated = False
         self.ds_name = None
@@ -30,6 +36,9 @@ class PinAuthDialog:
 
         self.center_dialog()
         self.create_ui()
+        
+        # Apply current theme
+        self.apply_current_theme()
 
         if self.default_ds and self.default_ds in self.pin_manager.list_ds_names():
             self.ds_var.set(self.default_ds)
@@ -136,39 +145,37 @@ class PinAuthDialog:
 
         self.pin_entry.bind("<Return>", lambda e: self.verify_pin())
 
-        # Button frame with guaranteed visible buttons
+        # Button frame with rounded buttons
         button_frame = tk.Frame(inner_frame, bg=WHITE)
         button_frame.pack(fill=tk.X, pady=(30, 0))
 
-        # Simple but visible buttons
-        tk.Button(
+        # Create rounded buttons using the same logic as other screens
+        self.create_rounded_button(
             button_frame,
-            text="Cancel",
-            command=self.cancel,
-            bg="#e2e8f0",  # GRAY_200
-            fg="#334155",  # GRAY_700  
-            font=("Arial", 12, "bold"),
-            width=10,
-            height=2,
-            cursor="hand2"
-        ).pack(side=tk.RIGHT, padx=(10, 0))
+            "Cancel",
+            self.cancel,
+            bg_color=GRAY_200,
+            text_color=GRAY_700,
+            side="right",
+            padx=(10, 0)
+        )
 
-        tk.Button(
+        self.create_rounded_button(
             button_frame,
-            text="Verify",
-            command=self.verify_pin,
-            bg="#2563eb",  # PRIMARY_BLUE
-            fg="white",
-            font=("Arial", 12, "bold"),
-            width=10,
-            height=2,
-            cursor="hand2"
-        ).pack(side=tk.RIGHT)
+            "Verify",
+            self.verify_pin,
+            bg_color=PRIMARY_BLUE,
+            text_color=WHITE,
+            side="right"
+        )
 
         def on_ds_select(event=None):
             self.pin_entry.focus_set()
         
         ds_combo.bind("<<ComboboxSelected>>", on_ds_select)
+    def write_last_drill(self, lastdrill):
+        with open("Security/last_ds.txt", "w") as f:
+            f.write(lastdrill)
     
     def verify_pin(self):
         ds_name = self.ds_var.get()
@@ -185,6 +192,7 @@ class PinAuthDialog:
         if self.pin_manager.verify_pin(ds_name, pin):
             self.authenticated = True
             self.ds_name = ds_name
+            self.write_last_drill(ds_name)
             self.close()
         else:
             messagebox.showerror("Authentication Failed", "Invalid PIN. Please try again.")
@@ -203,6 +211,101 @@ class PinAuthDialog:
         self.center_dialog()
         self.dialog.wait_window()
         return self.authenticated, self.ds_name
+
+    def create_rounded_button(self, parent, text, command, bg_color=PRIMARY_BLUE, text_color=WHITE, side="left", padx=(0, 0)):
+        """Create a rounded button with hover effects"""
+        button_frame = tk.Frame(parent, bg=WHITE)
+        button_frame.pack(side=side, padx=padx)
+
+        canvas = tk.Canvas(
+            button_frame,
+            width=120,
+            height=40,
+            bg=WHITE,
+            highlightthickness=0
+        )
+        canvas.pack()
+
+        def draw_rounded_rect(fill_color=bg_color):
+            canvas.delete("button_bg")
+            radius = 15
+            x1, y1, x2, y2 = 2, 2, 118, 38
+
+            canvas.create_arc(x1, y1, x1 + 2*radius, y1 + 2*radius, 
+                            start=90, extent=90, fill=fill_color, outline=fill_color, tags="button_bg")
+            canvas.create_arc(x2 - 2*radius, y1, x2, y1 + 2*radius, 
+                            start=0, extent=90, fill=fill_color, outline=fill_color, tags="button_bg")
+            canvas.create_arc(x1, y2 - 2*radius, x1 + 2*radius, y2, 
+                            start=180, extent=90, fill=fill_color, outline=fill_color, tags="button_bg")
+            canvas.create_arc(x2 - 2*radius, y2 - 2*radius, x2, y2, 
+                            start=270, extent=90, fill=fill_color, outline=fill_color, tags="button_bg")
+
+            canvas.create_rectangle(x1 + radius, y1, x2 - radius, y2, 
+                                  fill=fill_color, outline=fill_color, tags="button_bg")
+            canvas.create_rectangle(x1, y1 + radius, x2, y2 - radius, 
+                                  fill=fill_color, outline=fill_color, tags="button_bg")
+
+        draw_rounded_rect()
+
+        text_id = canvas.create_text(
+            60, 20,
+            text=text,
+            fill=text_color,
+            font=("Arial", 12, "bold"),
+            tags="button_text"
+        )
+
+        def on_enter(event):
+            hover_color = self.darken_color(bg_color)
+            draw_rounded_rect(hover_color)
+            canvas.tag_raise("button_text")
+            canvas.itemconfig("button_text", fill=text_color)
+        
+        def on_leave(event):
+            draw_rounded_rect(bg_color)
+            canvas.tag_raise("button_text")
+            canvas.itemconfig("button_text", fill=text_color)
+
+        canvas.bind("<Button-1>", lambda e: command())
+        canvas.bind("<Enter>", on_enter)
+        canvas.bind("<Leave>", on_leave)
+        canvas.configure(cursor="hand2")
+        
+        return canvas
+    
+    def darken_color(self, hex_color):
+        """Darken a hex color by reducing RGB values"""
+        if hex_color.startswith('#'):
+            hex_color = hex_color[1:]
+        
+        try:
+            r = int(hex_color[0:2], 16)
+            g = int(hex_color[2:4], 16)
+            b = int(hex_color[4:6], 16)
+
+            r = max(0, r - 30)
+            g = max(0, g - 30)
+            b = max(0, b - 30)
+            
+            return f"#{r:02x}{g:02x}{b:02x}"
+        except:
+            return "#2d3748"
+
+    def apply_current_theme(self):
+        """Apply the current theme to the pin auth dialog"""
+        try:
+            current_theme = theme_manager.get_current_theme()
+            colors = get_theme_colors(current_theme)
+            
+            # Update dialog background
+            self.dialog.configure(bg=colors['BG_PRIMARY'])
+            
+            # Update any frames and widgets that might have been created
+            if hasattr(self, 'main_frame'):
+                self.main_frame.configure(bg=colors['BG_PRIMARY'])
+                
+        except Exception as e:
+            print(f"Error applying theme to PinAuthDialog: {e}")
 
 def test_pin_dialog():
     root = tk.Tk()

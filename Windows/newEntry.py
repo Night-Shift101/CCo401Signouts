@@ -726,7 +726,7 @@ class NewEntryWindow:
             'destination': self.destination_var.get(),
             'phone': self.phone_var.get(),
             'categories': selected_categories,
-            'notes': ''  # Can be extended later
+            'ds': ds_name  # Can be extended later
         }
 
         print(f"Form data: {form_data}")

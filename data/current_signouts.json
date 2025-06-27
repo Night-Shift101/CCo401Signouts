@@ -1,75 +1,17 @@
 {
-  "last_updated": "2025-06-26T07:03:16.177224",
+  "last_updated": "2025-06-27T15:32:06.836305",
   "signouts": [
     {
-      "id": "002",
-      "soldiers": [
-        "SGT Johnson, M.",
-        "SPC Williams, A.",
-        "PFC Brown, D."
-      ],
-      "destination": "xn",
-      "phone": "(123) 456-7890",
-      "datetime": "2025-06-25T21:21:43.436627",
-      "notes": "",
-      "created_at": "2025-06-25T21:21:43.436978"
-    },
-    {
-      "id": "003",
-      "soldiers": [
-        "SGT Johnson, M.",
-        "PFC Brown, D.",
-        "CPL Davis, R.",
-        "SSG Garcia, L."
-      ],
-      "destination": "fdg",
-      "phone": "(123) 456-7890",
-      "datetime": "2025-06-25T22:26:16.308904",
-      "notes": "",
-      "created_at": "2025-06-25T21:21:53.704533",
-      "categories": [
-        "Family",
-        "Off Post"
-      ],
-      "last_modified": "2025-06-26T06:59:54.051827"
-    },
-    {
-      "id": "004",
-      "soldiers": [
-        "SGT Johnson, M.",
-        "SPC Williams, A.",
-        "PFC Brown, D."
-      ],
-      "destination": "d",
-      "phone": "(123) 456-7890",
-      "datetime": "2025-06-26T06:58:19.282335",
-      "notes": "",
-      "created_at": "2025-06-26T06:58:19.283705"
-    },
-    {
-      "id": "005",
-      "soldiers": [
-        "SGT Johnson, M.",
-        "SPC Williams, A.",
-        "PFC Brown, D."
-      ],
-      "destination": "Augusta Mall",
-      "phone": "(618) 406-9442",
-      "datetime": "2025-06-26T07:00:16.083495",
-      "notes": "",
-      "created_at": "2025-06-26T07:00:16.084887"
-    },
-    {
-      "id": "006",
+      "id": "001",
       "soldiers": [
         "SGT Johnson, M.",
         "SPC Williams, A."
       ],
-      "destination": "Off Posy",
+      "destination": "Pool, Px, Mall, Your moms house",
       "phone": "(123) 456-7890",
-      "datetime": "2025-06-26T07:03:16.175858",
-      "notes": "",
-      "created_at": "2025-06-26T07:03:16.177217"
+      "datetime": "2025-06-27T15:32:06.832924",
+      "ds": "DS Smith",
+      "created_at": "2025-06-27T15:32:06.836305"
     }
   ]
 }

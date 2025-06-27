@@ -12,7 +12,7 @@ class DataUtils:
             'phone': DataUtils.format_phone_number(ui_data.get('phone', '')),
             'categories': ui_data.get('categories', []),
             'datetime': datetime.now().isoformat(),
-            'notes': ui_data.get('notes', '').strip()
+            'ds': ui_data.get('ds', '').strip()
         }
         
         return storage_data
@@ -24,7 +24,7 @@ class DataUtils:
         soldiers = storage_data.get('soldiers', [])
         destination = storage_data.get('destination', '')
         phone = storage_data.get('phone', '')
-
+        ds = storage_data.get('ds', '')
         datetime_str = storage_data.get('datetime', '')
         try:
             dt = datetime.fromisoformat(datetime_str.replace('Z', '+00:00'))
@@ -32,7 +32,7 @@ class DataUtils:
         except:
             formatted_datetime = datetime_str
         
-        return (entry_id, soldiers, destination, phone, formatted_datetime)
+        return (entry_id, soldiers, destination, phone, formatted_datetime, ds)
     
     @staticmethod
     def format_phone_number(phone):

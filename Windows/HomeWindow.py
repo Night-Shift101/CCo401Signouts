@@ -5,12 +5,14 @@ import os
 from PIL import Image, ImageTk
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from Config.colors import BG_PRIMARY, LIGHT_GRAY, PRIMARY_BLUE, WHITE, GRAY_100, GRAY_200, GRAY_500, GRAY_600, GRAY_700, ONXY, BUTTON_PRIMARY, BUTTON_PRIMARY_HOVER, ERROR, SUCCESS
+from Config.colors import BG_PRIMARY, LIGHT_GRAY, PRIMARY_BLUE, WHITE, GRAY_100, GRAY_200, GRAY_500, GRAY_600, GRAY_700, ONXY, BUTTON_PRIMARY, BUTTON_PRIMARY_HOVER, ERROR, SUCCESS, get_theme_colors
+from Config.theme_manager import theme_manager
 from Functions.data_manager import DataManager
 from Functions.data_utils import DataUtils
 from Security.pin_auth_dialog import PinAuthDialog
 
-from newEntry import NewEntryWindow
+from NewEntry import NewEntryWindow
+from AdminWindow import AdminWindow
 
 class HomeWindow:
     def __init__(self, title="Solider Sign-in System"):
@@ -27,14 +29,8 @@ class HomeWindow:
 
         self.current_ds = None  # Will be set during startup authentication
         
-        self.root.state('zoomed')
-        
-        try:
-            self.root.state('zoomed')
-        except:
-            screen_width = self.root.winfo_screenwidth()
-            screen_height = self.root.winfo_screenheight()
-            self.root.geometry(f"{screen_width}x{screen_height}+0+0")
+        # Set window to fullscreen by default
+        self.set_fullscreen()
 
         self.create_top_bar()
 
@@ -44,8 +40,60 @@ class HomeWindow:
 
         self.setup_keyboard_bindings()
 
+        # Register for theme changes
+        self.register_for_theme_changes()
+
         self.startup_authentication()
     
+    def set_fullscreen(self):
+        """Set the window to fullscreen mode, handling different OS behaviors"""
+        try:
+            # Try to set fullscreen mode (works on most systems)
+            self.root.attributes('-fullscreen', True)
+            
+            # Alternative: Use zoomed state for Windows
+            if sys.platform.startswith('win'):
+                self.root.state('zoomed')
+            
+        except Exception as e:
+            # Fallback: Maximize to screen size manually
+            try:
+                screen_width = self.root.winfo_screenwidth()
+                screen_height = self.root.winfo_screenheight()
+                self.root.geometry(f"{screen_width}x{screen_height}+0+0")
+                self.root.resizable(True, True)
+            except Exception as fallback_error:
+                print(f"Could not set fullscreen: {e}, fallback failed: {fallback_error}")
+    
+    def toggle_fullscreen(self, event=None):
+        """Toggle between fullscreen and windowed mode"""
+        current_state = self.root.attributes('-fullscreen')
+        self.root.attributes('-fullscreen', not current_state)
+        
+        if not current_state:  # If going to fullscreen
+            # Hide window decorations
+            self.root.overrideredirect(False)
+        else:  # If going to windowed
+            # Show window decorations and set reasonable size
+            self.root.overrideredirect(False)
+            self.root.geometry("1200x800")
+            # Center the window
+            self.center_window()
+    
+    def center_window(self):
+        """Center the window on the screen when in windowed mode"""
+        self.root.update_idletasks()
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+        
+        window_width = 1200
+        window_height = 800
+        
+        x = (screen_width // 2) - (window_width // 2)
+        y = (screen_height // 2) - (window_height // 2)
+        
+        self.root.geometry(f"{window_width}x{window_height}+{x}+{y}")
+
     def create_top_bar(self):
 
         self.top_bar = tk.Frame(self.root, bg=ONXY, height=100)
@@ -158,8 +206,9 @@ class HomeWindow:
             ("ID", 0.05),               # 5% - Reduced from 8%
             ("Soldiers", 0.40),         # 40% - Increased from 35% for more chip space
             ("Destination", 0.20),      # 20% - Increased from 18%
-            ("Phone Number", 0.15),     # 15% - Increased from 13%
-            ("Sign-Out Time & Date", 0.20) # 20% - Increased from 15%
+            ("Phone Number", 0.10),     # 15% - Increased from 13%
+            ("Sign-Out Time & Date", 0.15), # 20% - Increased from 15%
+            ("DS", 0.10 )
         ]
 
         for i, (header, width_ratio) in enumerate(columns):
@@ -235,9 +284,7 @@ class HomeWindow:
                 return "break"
         
         def _on_mousewheel_mac_specific(event):
-
             if hasattr(event, 'delta'):
-
                 if event.delta > 0:
                     canvas.yview_scroll(-1, "units")  # Scroll up slowly
                 else:
@@ -365,8 +412,10 @@ class HomeWindow:
                 elif col_idx == 3:  # Phone Number column
                     text_color = "#718096"  # Light gray
                 elif col_idx == 4:  # Sign-Out Time & Date column
+                    text_color = "#718096"  # Red to draw attention to time
+                elif col_idx == 5:  # Sign-Out Time & Date column
                     font_weight = "bold"
-                    text_color = "#e53e3e"  # Red to draw attention to time
+                    text_color = "#718096"  # Red to draw attention to time
 
                 cell_label = tk.Label(
                     row_frame,
@@ -571,7 +620,7 @@ class HomeWindow:
             lambda: self.on_button_click("NEW ENTRY"),
             button_color=SUCCESS
         )
-
+        
         self.btn_edit = self.create_rounded_button(
             self.left_section, 
             "EDIT", 
@@ -702,11 +751,14 @@ class HomeWindow:
         def on_leave(event):
             if canvas.button_enabled:
                 update_button_appearance()
-
         canvas.bind("<Button-1>", on_click)
         canvas.bind("<Enter>", on_enter)
         canvas.bind("<Leave>", on_leave)
-        
+        def deferred_draw():
+            update_button_appearance()
+
+        canvas.after(10, deferred_draw)
+
         return canvas
 
     def startup_authentication(self):
@@ -722,6 +774,7 @@ class HomeWindow:
                     print(f"Startup authentication successful. Current DS: {ds_name}")
 
                     self.root.title(f"Soldier Sign-in System - {ds_name}")
+
                     break
                 else:
 
@@ -812,9 +865,19 @@ class HomeWindow:
             else:
                 messagebox.showwarning("No Selection", "Please select a row to sign in")
         elif button_name == "ADMIN":
-
-            print("Admin functionality not yet implemented")
+            # Require PIN authentication for admin access
+            if self.authenticate_ds_action("access admin functions"):
+                self.open_admin_panel()
     
+    def open_admin_panel(self):
+        """Open the admin panel window"""
+        try:
+            admin_window = AdminWindow(parent=self.root, current_ds=self.current_ds)
+            # No need to call show() since it's a Toplevel window
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to open admin panel: {str(e)}")
+            print(f"Error opening admin panel: {e}")
+
     def sign_in_selected_entry(self):
         
         if self.selected_row_idx is not None and self.selected_row_idx < len(self.row_data_list):
@@ -980,7 +1043,11 @@ class HomeWindow:
         self.root.bind("<Home>", self.select_first_row)
         self.root.bind("<End>", self.select_last_row)
 
+        # Escape key only for clearing selection (no fullscreen toggle)
         self.root.bind("<Escape>", lambda e: self.clear_selection())
+        
+        # F11 for fullscreen toggle
+        self.root.bind("<F11>", self.toggle_fullscreen)
 
         self.root.bind("<Return>", self.on_enter_key)
     
@@ -1054,6 +1121,56 @@ class HomeWindow:
             self.status_label.configure(text=status_text, fg=PRIMARY_BLUE)
         else:
             self.status_label.configure(text="No row selected - Click on a row to select it", fg=GRAY_600)
+
+    def register_for_theme_changes(self):
+        """Register this window for theme change notifications"""
+        def on_theme_change(new_theme):
+            """Callback when theme changes"""
+            try:
+                colors = get_theme_colors(new_theme)
+                
+                # Update main window
+                self.root.configure(bg=colors['BG_PRIMARY'])
+                
+                # Update top bar
+                if hasattr(self, 'top_bar'):
+                    self.top_bar.configure(bg=colors['ONXY'])
+                
+                # Update main content
+                if hasattr(self, 'main_content'):
+                    self.main_content.configure(bg=colors['BG_PRIMARY'])
+                
+                # Update table area
+                if hasattr(self, 'table_frame'):
+                    self.table_frame.configure(bg=colors['WHITE'])
+                
+                # Update status bar
+                if hasattr(self, 'status_bar'):
+                    self.status_bar.configure(bg=colors['ONXY'])
+                    
+                # Update any labels and other widgets
+                self.update_widget_colors(colors)
+                    
+            except Exception as e:
+                print(f"Error updating HomeWindow theme: {e}")
+        
+        theme_manager.register_callback(on_theme_change)
+    
+    def update_widget_colors(self, colors):
+        """Update colors of all widgets based on theme"""
+        try:
+            # Update any title labels
+            for widget in self.root.winfo_children():
+                if isinstance(widget, tk.Label):
+                    current_bg = widget.cget('bg')
+                    if current_bg == ONXY:
+                        widget.configure(bg=colors['ONXY'])
+                    elif current_bg == WHITE:
+                        widget.configure(bg=colors['WHITE'])
+                    elif current_bg == BG_PRIMARY:
+                        widget.configure(bg=colors['BG_PRIMARY'])
+        except Exception as e:
+            print(f"Error updating widget colors: {e}")
 
 if __name__ == "__main__":
 

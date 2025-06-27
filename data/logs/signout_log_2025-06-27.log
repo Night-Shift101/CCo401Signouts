@@ -1,0 +1,50 @@
+2025-06-27 06:50:26 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 06:52:07 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 07:06:29 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 07:07:31 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 07:13:34 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 07:32:11 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 10:48:59 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 10:49:37 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 10:49:57 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 10:55:04 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 10:58:05 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 10:59:58 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 11:02:05 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 11:07:45 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 11:08:22 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 14:43:22 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 14:45:08 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 14:47:49 | INFO | SIGN-OUT | ID: 010 | Soldiers: SGT Johnson, M. | Destination: 123 | Phone: (123) 456-7890
+2025-06-27 14:51:37 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 14:53:46 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 14:54:15 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 14:58:31 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 15:03:43 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 15:04:03 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 15:05:58 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 15:06:07 | INFO | SIGN-IN | ID: 010 | Soldiers: SGT Johnson, M. | Duration: 18m
+2025-06-27 15:06:11 | INFO | SIGN-IN | ID: 003 | Soldiers: SGT Johnson, M., PFC Brown, D., CPL Davis, R., SSG Garcia, L. | Duration: 40h 39m
+2025-06-27 15:06:14 | INFO | SIGN-IN | ID: 004 | Soldiers: SGT Johnson, M., PFC Brown, D. | Duration: 32h 7m
+2025-06-27 15:06:18 | INFO | SIGN-IN | ID: 006 | Soldiers: SGT Johnson, M., SPC Williams, A. | Duration: 32h 3m
+2025-06-27 15:06:21 | INFO | SIGN-IN | ID: 007 | Soldiers: SGT Johnson, M., SPC Williams, A. | Duration: 22h 9m
+2025-06-27 15:06:24 | INFO | SIGN-IN | ID: 009 | Soldiers: SGT Johnson, M., SPC Williams, A. | Duration: 21h 35m
+2025-06-27 15:06:27 | INFO | SIGN-IN | ID: 008 | Soldiers: SGT Johnson, M. | Duration: 21h 44m
+2025-06-27 15:06:40 | INFO | SIGN-OUT | ID: 001 | Soldiers: SGT Johnson, M., SPC Williams, A. | Destination: Off Post | Phone: (123) 456-7890
+2025-06-27 15:07:43 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 15:07:58 | INFO | SIGN-OUT | ID: 002 | Soldiers: SGT Johnson, M., SPC Williams, A. | Destination: 123 | Phone: (123) 456-7980
+2025-06-27 15:08:09 | INFO | SIGN-IN | ID: 002 | Soldiers: SGT Johnson, M., SPC Williams, A. | Duration: 0m
+2025-06-27 15:08:13 | INFO | SIGN-IN | ID: 001 | Soldiers: SGT Johnson, M., SPC Williams, A. | Duration: 1m
+2025-06-27 15:08:39 | INFO | SIGN-OUT | ID: 001 | Soldiers: SGT Johnson, M., SPC Williams, A. | Destination: Off Post | Phone: (123) 456-7890
+2025-06-27 15:12:59 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 15:13:16 | INFO | SIGN-IN | ID: 001 | Soldiers: SGT Johnson, M., SPC Williams, A. | Duration: 4m | Authorized By: DS Johnson
+2025-06-27 15:13:53 | INFO | SIGN-OUT | ID: 001 | Soldiers: SGT Johnson, M., SPC Williams, A. | Destination: Off Base | Phone: (123) 456-7890 | Authorized By: DS Smith
+2025-06-27 15:17:32 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 15:18:30 | INFO | SIGN-OUT | ID: 002 | Soldiers: SGT Johnson, M. | Destination: Off POst | Phone: (123) 456-7890 | Authorized By: DS Smith
+2025-06-27 15:20:12 | INFO | SIGN-OUT | ID: 003 | Soldiers: SGT Johnson, M., SPC Williams, A., PFC Brown, D. | Destination: Pool w/o Gil | Phone: (456) 736-4758 | Authorized By: DS Smith
+2025-06-27 15:22:28 | INFO | SIGN-IN | ID: 003 | Soldiers: SGT Johnson, M., SPC Williams, A., PFC Brown, D. | Duration: 2m | Authorized By: DS Smith
+2025-06-27 15:28:24 | INFO | === Soldier Sign-out System Started ===
+2025-06-27 15:30:13 | INFO | SIGN-IN | ID: 002 | Soldiers: SGT Johnson, M. | Duration: 11m | Authorized By: DS Smith
+2025-06-27 15:31:38 | INFO | UPDATED | ID: 001 | Soldiers: SGT Johnson, M., SPC Williams, A.
+2025-06-27 15:31:44 | INFO | SIGN-IN | ID: 001 | Soldiers: SGT Johnson, M., SPC Williams, A. | Duration: 17m | Authorized By: DS Smith
+2025-06-27 15:32:06 | INFO | SIGN-OUT | ID: 001 | Soldiers: SGT Johnson, M., SPC Williams, A. | Destination: Pool, Px, Mall, Your moms house | Phone: (123) 456-7890 | Authorized By: DS Smith

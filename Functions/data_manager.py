@@ -89,7 +89,7 @@ class DataManager:
             'destination': signout_data['destination'],
             'phone': signout_data['phone'],
             'datetime': signout_data['datetime'],
-            'notes': signout_data.get('notes', ''),
+            'ds': signout_data.get('ds', ''),
             'created_at': datetime.now().isoformat()
         }
 
@@ -102,7 +102,9 @@ class DataManager:
         soldiers_str = ", ".join(signout_data['soldiers'])
         self.logger.info(
             f"SIGN-OUT | ID: {new_id} | Soldiers: {soldiers_str} | "
-            f"Destination: {signout_data['destination']} | Phone: {signout_data['phone']}"
+            f"Destination: {signout_data['destination']} | Phone: {signout_data['phone']} | "
+            f"Authorized By: {signout_data['ds']}"
+
         )
         
         return new_id
@@ -127,7 +129,8 @@ class DataManager:
             soldiers_str = ", ".join(entry_to_remove['soldiers'])
             self.logger.info(
                 f"SIGN-IN | ID: {entry_id} | Soldiers: {soldiers_str} | "
-                f"Duration: {self._calculate_duration(entry_to_remove['datetime'])}"
+                f"Duration: {self._calculate_duration(entry_to_remove['datetime'])} | "
+                f"Authorized By: {entry_to_remove['ds']}"
             )
             
             return True
